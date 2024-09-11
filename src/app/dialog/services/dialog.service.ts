@@ -1,6 +1,8 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { takeUntil } from 'rxjs';
+
 import { DialogComponent } from '../components/dialog/dialog.component';
 
 @Injectable({
@@ -17,7 +19,7 @@ export class DialogService {
    * @param dialogId
    * @returns dialog ref that's brought to front
    */
-  public bringToFront(dialogId: string): MatDialogRef<any> {
+  public bringToFront(dialogId: string): void {
     if (this.currentDialogRef && this.currentDialogRef?.id !== dialogId) {
       this.currentDialogRef = this.dialog.getDialogById(dialogId);
       const focusedDialog = Array.from(this.cdk.getContainerElement().childNodes).find(
@@ -29,8 +31,6 @@ export class DialogService {
         this.cdk.getContainerElement().appendChild(focusedDialog);
       }
     }
-
-    return this.currentDialogRef;
   }
 
   public close(result?: any): void {
@@ -38,7 +38,20 @@ export class DialogService {
   }
 
   public open(config?: MatDialogConfig): MatDialogRef<any> {
-    this.currentDialogRef = this.dialog.open(DialogComponent, config);
+    this.currentDialogRef = this.dialog.open(DialogComponent, {
+      hasBackdrop: false,
+      disableClose: true,
+      ...config
+    });
+
+    this.currentDialogRef
+      .keydownEvents()
+      .pipe(takeUntil(this.currentDialogRef?.afterClosed()))
+      .subscribe(event => {
+        if (event.key === 'Escape') {
+          this.close();
+        }
+      });
     
     return this.currentDialogRef;
   }

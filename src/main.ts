@@ -14,8 +14,10 @@ import { DialogService } from './app/dialog';
   ],
   standalone: true,
   template: `
-    <h1>Manage multiple dialogs in Angular Material!</h1>
-    <button mat-flat-button (click)="openDialog()">Open Dialog</button>
+    <section class="mx-2">
+      <h1>Manage multiple dialogs in Angular Material!</h1>
+      <button mat-stroked-button (click)="openDialog()">Open Dialog</button>
+    </section>
   `,
 })
 export class App implements OnInit {
@@ -23,7 +25,6 @@ export class App implements OnInit {
   constructor(private dialogService: DialogService) {}
   ngOnInit(): void {
     this.dialogService.open({
-      hasBackdrop: false,
       width: '80vw',
       maxWidth: '1200px',
       position: {
@@ -33,7 +34,6 @@ export class App implements OnInit {
     });
 
     this.dialogService.open({
-      hasBackdrop: false,
       width: '80vw',
       maxWidth: '1200px',
       position: {
@@ -45,7 +45,6 @@ export class App implements OnInit {
   }
   public openDialog(): void {
     this.dialogService.open({
-      hasBackdrop: false,
       width: '80vw'
     });
   }
