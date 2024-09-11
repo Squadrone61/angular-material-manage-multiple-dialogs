@@ -1,5 +1,5 @@
 {
-  "name": "angular-starter",
+  "name": "angular-material-multiple-dialogs",
   "private": true,
   "scripts": {
     "ng": "ng",
